@@ -1,0 +1,34 @@
+server:
+  port: 9999
+
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: book-route
+          uri: lb://book-service
+          predicates:
+            - Path=/api/books/**
+
+        - id: user-route
+          uri: lb://user-service
+          predicates:
+            - Path=/api/users/**
+
+        - id: emprunt-route
+          uri: lb://emprunt-service
+          predicates:
+            - Path=/api/emprunts/**
+
+eureka:
+  client:
+    service-url:
+      # IMPORTANT : Mettez 'localhost' pour tester dans IntelliJ.
+      # Docker remplacera cela automatiquement par 'eureka-service' au déploiement.
+      defaultZone: http://localhost:8761/eureka/
